@@ -9,6 +9,8 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 
+import 'luklak_color.dart';
+
 // Examples can assume:
 // late BuildContext context;
 
@@ -25,7 +27,7 @@ const double _kTimePickerHeaderControlHeight = 80.0;
 const double _kTimePickerWidthPortrait = 328.0;
 const double _kTimePickerWidthLandscape = 528.0;
 
-const double _kTimePickerHeightInput = 226.0;
+const double _kTimePickerHeightInput = 246.0;
 const double _kTimePickerHeightPortrait = 496.0;
 const double _kTimePickerHeightLandscape = 316.0;
 
@@ -33,7 +35,7 @@ const double _kTimePickerHeightPortraitCollapsed = 484.0;
 const double _kTimePickerHeightLandscapeCollapsed = 304.0;
 
 const BorderRadius _kDefaultBorderRadius =
-    BorderRadius.all(Radius.circular(4.0));
+    BorderRadius.all(Radius.circular(16.0));
 const ShapeBorder _kDefaultShape =
     RoundedRectangleBorder(borderRadius: _kDefaultBorderRadius);
 
@@ -271,7 +273,6 @@ class _HourMinuteControl extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData themeData = Theme.of(context);
     final TimePickerThemeData timePickerTheme = TimePickerTheme.of(context);
-    final bool isDark = themeData.colorScheme.brightness == Brightness.dark;
     final Color textColor = timePickerTheme.hourMinuteTextColor ??
         MaterialStateColor.resolveWith((Set<MaterialState> states) {
           return states.contains(MaterialState.selected)
@@ -281,7 +282,7 @@ class _HourMinuteControl extends StatelessWidget {
     final Color backgroundColor = timePickerTheme.hourMinuteColor ??
         MaterialStateColor.resolveWith((Set<MaterialState> states) {
           return states.contains(MaterialState.selected)
-              ? themeData.colorScheme.primary.withOpacity(isDark ? 0.24 : 0.12)
+              ? themeData.colorScheme.primary.withOpacity(0.12)
               : themeData.colorScheme.onSurface.withOpacity(0.12);
         });
     final TextStyle style =
@@ -1432,7 +1433,10 @@ class _TimePickerInputState extends State<_TimePickerInput>
       return null;
     }
 
-    if (MediaQuery.of(context).alwaysUse24HourFormat) {
+    /** Default is MediaQuery.of(context).alwaysUse24HourFormat
+     *  always true because of requirement for 24h format from business
+     * **/
+    if (true) {
       if (newHour >= 0 && newHour < 24) {
         return newHour;
       }
@@ -1882,6 +1886,7 @@ class _HourMinuteTextFieldState extends State<_HourMinuteTextField>
             controller: controller.value,
             decoration: inputDecoration,
             validator: widget.validator,
+            cursorColor: LukLakColor.primaryColor,
             onEditingComplete: () =>
                 widget.onSavedSubmitted(controller.value.text),
             onSaved: widget.onSavedSubmitted,
@@ -2379,12 +2384,17 @@ class _IntervalTimePickerDialogState extends State<IntervalTimePickerDialog>
                 TextButton(
                   onPressed: _handleCancel,
                   child: Text(
-                      widget.cancelText ?? localizations.cancelButtonLabel),
+                      widget.cancelText ?? localizations.cancelButtonLabel,
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600,color: LukLakColor.textSecondary),
+                  ),
                 ),
                 TextButton(
                   onPressed: _handleOk,
                   child:
-                      Text(widget.confirmText ?? localizations.okButtonLabel),
+                      Text(
+                        widget.confirmText ?? localizations.okButtonLabel,
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600,color: LukLakColor.textPrimary),
+                      ),
                 ),
               ],
             ),
